@@ -86,6 +86,7 @@ def music_search():
     response = requests.get(url=url, headers=headers, params=para_data)
     search_json = json.loads(response.text.encode('utf-8'))
     data = search_json.get('data').get('list')
+
     result = []
     for d in data:
         result.append({
@@ -95,14 +96,14 @@ def music_search():
             'artist': d.get('artist'),  # 歌手
             'songTimeMinutes': d.get('songTimeMinutes')  # 时长
         })
-
     return result
 
 
 def music_show(result):
     """格式化输出搜索到的歌曲信息"""
-    print('序号\t歌名\t\t\t\t\t\t\t\t专辑\t\t\t\t\t\t歌手\t\t\t时长')
     if len(result) > 0:
+        print('序号\t歌名\t\t\t\t\t\t\t\t专辑\t\t\t\t\t\t歌手\t\t\t时长')
+
         i = 0  # 计数
         for r in result:
             i += 1
@@ -136,7 +137,7 @@ def music_download(result):
             url = 'https://www.kuwo.cn/url?'
             para_data = {
                 'format': 'mp3',
-                'rid': result[index-1]['rid'],
+                'rid': result[index - 1]['rid'],
                 'response': 'url',
                 'type': 'convert_url3',
                 'br': '128kmp3',
@@ -145,12 +146,17 @@ def music_download(result):
                 'httpsStatus': '1'
             }
             response = requests.get(url=url, headers=headers, params=para_data)
-            download_url = json.loads(response.text.encode('utf-8')).get('url')
-            download_response = requests.get(url=download_url)
-
-            with open(result[index-1]['name'] + '-' + result[index-1]['artist'] + '.mp3', 'wb') as f:
-                f.write(download_response.content)
-            print(str(index) + ' 下载完成！')
+            if response.status_code == 200:
+                download_url = json.loads(response.text.encode('utf-8')).get('url')
+                download_response = requests.get(url=download_url)
+                if download_response.status_code == 200:
+                    with open(result[index - 1]['name'] + '-' + result[index - 1]['artist'] + '.mp3', 'wb') as f:
+                        f.write(download_response.content)
+                    print(str(index) + ' 下载完成！')
+                else:
+                    print('解析失败')
+            else:
+                print('解析失败')
 
     except ValueError as e:
         print('无效输入！')
