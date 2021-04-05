@@ -12,8 +12,8 @@ import urllib.parse
 import re
 
 
+# 获取字符串字节数
 def get_str_width(string):
-    """获取字符串字节数"""
     widths = [
         (126, 1), (159, 0), (687, 1), (710, 0), (711, 1),
         (727, 0), (733, 1), (879, 0), (1154, 1), (1161, 0),
@@ -47,8 +47,8 @@ def get_str_width(string):
     return width
 
 
+# 字符串按指定宽度对齐
 def align_string(string, width):
-    """字符串按指定宽度对齐"""
     string_width = get_str_width(string)
     if width > string_width:
         return string + ' ' * (width - string_width)
@@ -68,8 +68,8 @@ headers = {
 }
 
 
+# 按歌曲名称搜索，并返回搜索结果的list
 def music_search():
-    """按歌曲名称搜索，并返回搜索结果的list"""
     key = input('请输入搜索的歌名（无输入将退出）：')
     if key is None or key.strip() == '':
         exit(0)
@@ -99,8 +99,8 @@ def music_search():
     return result
 
 
+# 格式化输出搜索到的歌曲信息
 def music_show(result):
-    """格式化输出搜索到的歌曲信息"""
     if len(result) > 0:
         print('序号\t歌名\t\t\t\t\t\t\t\t专辑\t\t\t\t\t\t歌手\t\t\t时长')
 
@@ -121,8 +121,8 @@ def music_show(result):
         print('没有找到！')
 
 
+# 下载音乐
 def music_download(result):
-    """下载音乐"""
     select = input('输入下载的序号（0返回搜索；多个序号用逗号隔开）：')
     s_list = re.split(r'[,，]', select)
 
