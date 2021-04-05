@@ -136,7 +136,7 @@ def music_download(result):
             url = 'https://www.kuwo.cn/url?'
             para_data = {
                 'format': 'mp3',
-                'rid': result[index]['rid'],
+                'rid': result[index-1]['rid'],
                 'response': 'url',
                 'type': 'convert_url3',
                 'br': '128kmp3',
@@ -148,7 +148,7 @@ def music_download(result):
             download_url = json.loads(response.text.encode('utf-8')).get('url')
             download_response = requests.get(url=download_url)
 
-            with open(result[index]['name'] + '-' + result[index]['artist'] + '.mp3', 'wb') as f:
+            with open(result[index-1]['name'] + '-' + result[index-1]['artist'] + '.mp3', 'wb') as f:
                 f.write(download_response.content)
             print(str(index) + ' 下载完成！')
 
