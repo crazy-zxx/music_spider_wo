@@ -5,6 +5,7 @@
 
 __author__ = 'xylx'
 
+import align_print
 import requests
 import json
 import time
@@ -62,8 +63,13 @@ def music_show(result):
         i = 0  # 计数
         for r in result:
             i += 1
-            print('{0:<3}{1:<50}{2:<50}{3:<40}{4:<10}'.format(str(i), r['name'], r['album'], r['artist'],
-                  r['songTimeMinutes'],chr(12288)))
+            # 获取指定长度且末尾补齐空格的字符串
+            mid = align_print.align_string(str(i), 4)
+            name = align_print.align_string(r['name'], 50)
+            album = align_print.align_string(r['album'], 50)
+            artist = align_print.align_string(r['artist'], 20)
+            song_time_minutes = align_print.align_string(r['songTimeMinutes'], 10)
+            print(mid + ' ' + name + ' ' + album + ' ' + artist + ' ' + song_time_minutes)
 
         music_download(result)
 
